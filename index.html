@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>《学科召唤》 · 在线卡牌对战</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ======== 顶部导航 ======== -->
+    <nav id="nav">
+      <div class="brand-mark">
+        <span class="mark-emoji">✧</span>
+        <div class="brand-text">
+          <div class="brand-name">学科召唤</div>
+          <div class="brand-sub">XUEKE SUMMON · ONLINE</div>
+        </div>
+      </div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-view="home">首页</button>
+        <button class="nav-tab" data-view="deck">卡组装配</button>
+        <button class="nav-tab" data-view="codex">图鉴</button>
+      </div>
+      <div class="nav-right">
+        <span id="connBadge" class="conn-badge off">离线</span>
+        <button id="topStart" class="btn btn-gold btn-sm">快速开始</button>
+      </div>
+    </nav>
+
+    <!-- ======== 首页 ======== -->
+    <section id="view-home" class="view">
+      <header class="hero">
+        <div class="hero-inner">
+          <div class="hero-eyebrow">桌游 × 学科 × 策略</div>
+          <h1 class="hero-title">学科召唤</h1>
+          <p class="hero-tagline">九大学科觉醒，执掌文理之力。一场属于智者的巅峰对决。</p>
+          <div class="hero-rule"></div>
+          <div class="hero-metrics">
+            <div class="metric"><b>9</b><span>学科角色</span></div>
+            <div class="metric"><b>58</b><span>策略手牌</span></div>
+            <div class="metric"><b>2</b><span>对战模式</span></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="home-body">
+        <!-- 模式选择 -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>选择对战模式</h2>
+            <span class="panel-note">MODE</span>
+          </div>
+          <div class="mode-grid">
+            <button class="mode-card" data-mode="pve">
+              <div class="mode-icon">🤖</div>
+              <div class="mode-title">人机对战</div>
+              <div class="mode-desc">挑战内置智能对手，随时开局</div>
+            </button>
+            <button class="mode-card" data-mode="pvp">
+              <div class="mode-icon">🌐</div>
+              <div class="mode-title">局域网联机</div>
+              <div class="mode-desc">同一网络好友实时对决</div>
+            </button>
+          </div>
+          <div id="pvpRoomRow" class="room-row" style="display:none">
+            <label>房间号</label>
+            <input id="room" type="text" value="r1" maxlength="12" placeholder="如 r1">
+            <span class="hint">主机填一个房间号创建；另一台设备填相同房间号加入。</span>
+          </div>
+        </div>
+
+        <!-- 队伍编排 -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>出征队伍 <em>必须选择 3 位角色</em></h2>
+            <span class="panel-note">TEAM</span>
+          </div>
+          <div class="team-slots" id="teamSlots"></div>
+          <div class="divider">选择角色 · 按点击顺序确定站位（点击已选角色可移除）</div>
+          <div class="char-picker" id="charPicker"></div>
+        </div>
+
+        <!-- 卡组概要 -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>卡组配置</h2>
+            <span class="panel-note">DECK</span>
+          </div>
+          <div class="deck-summary">
+            <div class="deck-badge">
+              <span class="deck-icon">🂠</span>
+              <div>
+                <div class="deck-name" id="deckName">未装配</div>
+                <div class="deck-count" id="deckCount">0 / 30 张</div>
+              </div>
+            </div>
+            <div class="deck-actions">
+              <button class="btn btn-line" id="goDeck">前往装配</button>
+              <button class="btn btn-line" id="clearDeck">清空</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 开始 -->
+        <div class="start-strip">
+          <input id="name" type="text" value="指挥官" placeholder="你的名字" maxlength="12">
+          <button id="startBtn" class="btn btn-gold btn-xl">开 始 对 战</button>
+        </div>
+        <div id="homeMsg" class="home-msg"></div>
+      </div>
+    </section>
+
+    <!-- ======== 卡组装配 ======== -->
+    <section id="view-deck" class="view">
+      <div class="deck-page">
+        <div class="page-head">
+          <div>
+            <h2>卡组装配</h2>
+            <p>每张牌最多 2 张 · 整副牌组最多 30 张</p>
+          </div>
+          <div class="deck-toolbar">
+            <span class="deck-total" id="deckTotal">0/30</span>
+            <button class="btn btn-line" id="autoDeck">一键填充</button>
+            <button class="btn btn-line" id="clearDeck2">清空</button>
+            <button class="btn btn-gold" id="saveDeck">保存卡组</button>
+          </div>
+        </div>
+        <div class="filter-row" id="deckFilters"></div>
+        <div class="card-grid" id="deckGrid"></div>
+      </div>
+    </section>
+
+    <!-- ======== 图鉴 ======== -->
+    <section id="view-codex" class="view">
+      <div class="codex-page">
+        <div class="page-head">
+          <div>
+            <h2>学科图鉴</h2>
+            <p>查阅所有角色与手牌的效果说明</p>
+          </div>
+          <div class="codex-tabs">
+            <button class="codex-tab active" data-tab="char">角色</button>
+            <button class="codex-tab" data-tab="card">手牌</button>
+            <button class="codex-tab" data-tab="react">元素反应</button>
+            <button class="codex-tab" data-tab="summon">召唤物</button>
+          </div>
+        </div>
+        <div class="codex-filter" id="codexFilter" style="display:none"></div>
+        <div class="card-grid" id="codexGrid"></div>
+      </div>
+    </section>
+
+    <!-- ======== 对局界面 ======== -->
+    <section id="view-game" class="view">
+      <header id="topbar">
+        <div class="brand">《学科召唤》</div>
+        <div class="meta">
+          <span id="roundInfo">回合 1</span>
+          <span id="fatigue"></span>
+          <span id="turnInfo"></span>
+        </div>
+        <div class="top-actions">
+          <button id="endTurnBtn" class="btn btn-line btn-sm" style="display:none">结束回合(下回合先手)</button>
+          <button id="quitBtn" class="btn btn-line btn-sm">退出对局</button>
+        </div>
+      </header>
+      <div id="gameMain">
+        <aside id="charPanel" class="info-panel left"></aside>
+        <main id="board">
+          <section id="oppZone" class="zone"></section>
+          <div id="middle">
+            <div id="banner"></div>
+            <div id="log"></div>
+          </div>
+          <section id="myZone" class="zone"></section>
+          <div id="handzone">
+            <div id="handHint" class="hand-hint">点击手牌查看详情并确认打出 · 点击角色卡查看信息与行动</div>
+            <div id="hand"></div>
+          </div>
+        </main>
+        <aside id="cardPanel" class="info-panel right"></aside>
+      </div>
+      <div id="fxLayer"></div>
+    </section>
+  </div>
+
+  <!-- 卡牌详情弹窗 -->
+  <div id="detailModal" class="modal" style="display:none">
+    <div class="modal-box detail-box">
+      <button class="modal-close" id="detailClose">✕</button>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <!-- 问答 -->
+  <div id="question" class="modal" style="display:none">
+    <div class="modal-box">
+      <h3>知识问答</h3>
+      <p id="qText"></p>
+      <div class="modal-actions">
+        <button id="qNo" class="btn btn-line">答不出来</button>
+        <button id="qYes" class="btn btn-gold">答出来了</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结束 -->
+  <div id="gameover" class="modal" style="display:none">
+    <div class="modal-box">
+      <h3 id="goTitle"></h3>
+      <p id="goText"></p>
+      <div class="modal-actions">
+        <button id="againBtn" class="btn btn-gold">再来一局</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/offline-bundle.js"></script>
+  <script src="js/client.js"></script>
+</body>
+</html>
