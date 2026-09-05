@@ -2,6 +2,10 @@
 
 参考《原神·七圣召唤》桌游化设计的学科卡牌对战游戏，已实现为一个可通过**局域网联机**的网页版。
 
+这是七圣召唤刚推出的那个版本的时候，本人试图将其桌游化而作出的一些尝试。而现在借助AI，0代码基础的本人也是终于将它端出来了。
+
+- **注意**：该项目目前处于超级早期的版本，可能会有一堆程序问题。有问题务必反馈，等我和AI扯皮。
+
 ## 功能
 
 - **人机对战（PvE）**：与内置 AI 对战。
@@ -103,7 +107,7 @@ tools/prepare-assets.ps1  素材降采样脚本（可重新生成 web/assets）
 - 回合结束后按「食物 > 召唤物 > 回血 buff > 到期 buff/debuff > 抽 2 张牌」结算。
 - 角色全部阵亡即败；第 10 回合起所有消耗 +1；第 15 回合未分胜负则平局。
 
-## 我对规则中模糊处的处理（可自行调整）
+## Codex对规则中模糊处的处理（可自行调整）
 
 数字版中一些「实体桌游」的交互做了合理简化，可在 `game/` 下修改：
 
@@ -120,55 +124,12 @@ tools/prepare-assets.ps1  素材降采样脚本（可重新生成 web/assets）
 加 `&pause=1` 则只在开局后停下，便于查看界面。
 加 `?view=deck` 或 `?view=codex` 可直接打开「卡组装配」或「图鉴」页面。
 
-## 部署到 GitHub Pages
-
-> GitHub Pages 只能托管静态文件，**局域网联机需要 Node 服务器**，所以 Pages 上可玩的是「离线 / 人机对战」模式（浏览器内置完整规则引擎与 AI，`https://<用户名>.github.io/<仓库>/` 下会自动识别为离线模式）。
-
-### 需要上传的文件（站点根目录 = `web/` 的全部内容）
-
-```
-index.html
-css/style.css
-js/client.js
-js/offline-bundle.js
-assets/                 （全部为 ASCII 文件名）
-├── characters/char_*.png
-├── cards/card_*.png
-├── icons/icon_*.png
-└── bg/board.png
-```
-
-**不要上传 / 不需要**：`node_modules`、`package.json`、`server.js`、`game/`、`data/`、`tools/`、`远古想法、素材库/`、`_docx_out.txt`、`_extract_docx.py` 等（这些只服务于本地服务器与素材制作，Pages 用不到）。
-
-### 推荐步骤
-1. 新建仓库（名字建议纯英文小写，如 `xueke-summon`，避免中文仓库名）。
-2. 把上面列出的文件放到仓库根目录（即 `web/` 里的内容放仓库根目录），`git push`。
-3. 仓库 Settings → Pages → Build and deployment → Source 选 `Deploy from a branch` → Branch 选 `main` / `(root)` → Save。
-4. 等 1–2 分钟，访问 `https://<你的用户名>.github.io/<仓库名>/`。
-5. 若想让人机对局与图鉴直接可用，请确保 `js/offline-bundle.js` 为最新（修改规则后用 `npm run build:offline` 重新生成再提交）。
-
-### 命名规范（已检查）
-- 网页目录 `web/` 内所有文件名已改为 **纯 ASCII**：角色图为 `char_yuwen.png`，手牌为 `card_w_caozhi.png`，图标为 `icon_zuowen.png` 等，不再含中文、`·`、`+`、全角括号，避免 GitHub / Git / CDN 兼容问题。
-- 仓库根目录、分支名、仓库名建议使用小写字母、数字、连字符。
-- `assets/` 下没有以 `_` 或 `.` 开头的文件，不需要 `.nojekyll`（已经可以正常托管）。
 
 ## 把“联机版”分享给朋友（GitHub 仓库 / Release）
 
 联机模式需要 Node 服务器，**不能**通过 GitHub Pages 直接联机。推荐两种方式：
 
-### 方式 A：源码仓库（适合持续更新）
-把下面的内容作为仓库根目录提交（`npm start` 即可开服务器联机）：
-
-```
-server.js / package.json / package-lock.json / README.md / .gitignore
-start.bat / start.sh
-game/   data/   web/   tools/
-```
-
-- 不要提交 `node_modules/`、`远古想法、素材库/`（`.gitignore` 已排除）。
-- 朋友使用：`git clone 你的仓库` → `npm install` → `npm start`（Windows 可直接双击 `start.bat`）。
-
-### 方式 B：GitHub Release 压缩包（最省事）
+### GitHub Release 压缩包
 项目内置打包脚本，一条命令生成可直接分发的 zip（约 18MB，已含全部网页素材、规则、AI，
 已排除 `node_modules`、原始大素材与临时文件）：
 
@@ -186,3 +147,10 @@ npm run build:release
 3. 注意：Windows 防火墙需放行 8080 端口；两台设备在同一局域网（同一 Wi-Fi/路由器）。
 
 > GitHub Pages 版本仍可单机/人机对战（内置引擎），但**联机请用上面的本地启动方式**。
+
+## 鸣谢
+
+---
+我  
+**Deepseek-v4-flash-vision-exp**  
+**Codex**
