@@ -208,6 +208,8 @@
   function renderHome() {
     renderTeamSlots();
     renderCharPicker();
+    const hd = $('#heroDate');
+    if (hd) hd.textContent = todayText();
     // 卡组概要
     const total = deckTotal();
     const name = total ? ('自定义卡组 · ' + total + '张') : '未装配';
@@ -215,6 +217,17 @@
     $('#deckCount').textContent = total + ' / ' + MAX_DECK + ' 张';
     $('#homeMsg').textContent = '';
     if (!G) $('#homeMsg').textContent = '⚠ 正在加载或连接失败。请确认服务器已启动（npm start）。';
+  }
+
+  function todayText() {
+    const d = new Date();
+    try {
+      return d.toLocaleDateString('zh-CN', {
+        timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+      });
+    } catch (e) {
+      return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日';
+    }
   }
 
   function renderTeamSlots() {
@@ -496,11 +509,14 @@
     }
     handle(msg) {
       if (msg.type === 'create' || msg.type === 'join') {
+        const ai = (window.XuekeDeck && window.XuekeDeck.aiLoadout)
+          ? window.XuekeDeck.aiLoadout()
+          : { team: ['shuxue', 'wuli', 'huaxue'], deck: this.settings.deck1 || [] };
         const st = window.XuekeEngine.createGame({
           matchup: 'pve',
           team0: this.settings.team0, deck0: this.settings.deck0,
-          team1: this.settings.team1 || ['shuxue', 'wuli', 'huaxue'],
-          deck1: this.settings.deck1 || ['sup_yunchou', 'sup_yunchou', 'r_li', 'r_li'],
+          team1: this.settings.team1 || ai.team,
+          deck1: this.settings.deck1 || ai.deck,
           ai1: true, name0: this.settings.name0 || '我', name1: 'AI 对手', seed: Math.floor(Math.random() * 1e9)
         });
         this.state = st;

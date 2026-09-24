@@ -129,6 +129,10 @@ button { cursor: pointer; }
   color: var(--gold); font-size: 16px;
 }
 .hero-metrics { display: flex; justify-content: center; gap: 54px; }
+.hero-date {
+  text-align: center; color: var(--muted); font-size: 13px; letter-spacing: 3px;
+  margin: -16px 0 26px;
+}
 .metric { text-align: center; }
 .metric b { display: block; font-family: var(--serif); font-size: 30px; color: var(--cream); }
 .metric span { font-size: 12px; letter-spacing: 3px; color: var(--muted); }
@@ -238,6 +242,13 @@ button { cursor: pointer; }
 }
 .start-strip input:focus { outline: none; border-color: var(--gold); }
 .home-msg { text-align: center; color: var(--gold); min-height: 22px; letter-spacing: 1px; }
+.bug-row { display: flex; justify-content: center; margin-top: 2px; }
+.bug-report {
+  display: inline-block; padding: 7px 16px; border-radius: 20px; font-size: 12px;
+  letter-spacing: 1px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); background: rgba(0,0,0,.2); transition: .18s;
+}
+.bug-report:hover { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
 
 /* ================= 子页面头 ================= */
 .deck-page, .codex-page { max-width: 1240px; margin: 0 auto; padding: 34px 22px 80px; }
@@ -551,8 +562,58 @@ button { cursor: pointer; }
 ::-webkit-scrollbar-track { background: transparent; }
 
 @media (max-width: 860px) {
-  .nav-tabs { display: none; }
-  .hero-title { letter-spacing: 8px; }
+  /* 顶栏：改成两行，保证「首页 / 卡组装配 / 图鉴」在手机上可见 */
+  #nav {
+    flex-wrap: wrap; height: auto; row-gap: 8px;
+    padding: 10px 14px; align-items: center;
+  }
+  .brand-mark { order: 1; }
+  .brand-name { font-size: 17px; letter-spacing: 3px; }
+  .brand-sub { display: none; }
+  .mark-emoji { width: 34px; height: 34px; font-size: 17px; }
+  .nav-right { order: 2; margin-left: auto; gap: 8px; }
+  .nav-tabs {
+    order: 3; width: 100%; display: flex; justify-content: center;
+    gap: 4px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px;
+  }
+  .nav-tab { flex: 0 0 auto; padding: 8px 14px; font-size: 14px; letter-spacing: 1px; }
+  .conn-badge { padding: 4px 8px; font-size: 11px; }
+  .btn-sm { padding: 7px 10px; font-size: 12px; }
+  #topStart { display: none; }
+
+  .hero-inner { padding: 40px 16px 28px; }
+  .hero-title { letter-spacing: 8px; font-size: clamp(40px, 14vw, 64px); }
+  .hero-tagline { font-size: 13px; letter-spacing: 1px; }
   .mode-grid { grid-template-columns: 1fr; }
   .hero-metrics { gap: 28px; }
+  .home-body { padding: 0 14px 50px; }
+  .panel { padding: 18px 16px; }
+  .panel-head h2 { font-size: 18px; letter-spacing: 2px; }
+  .team-slots { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .team-slot { min-height: 100px; padding: 8px 6px; }
+  .slot-char img { width: 54px; height: 76px; }
+  .char-picker { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 10px; }
+  .char-pick img { width: 56px; height: 80px; }
+  .start-strip { flex-direction: column; align-items: stretch; padding: 16px; }
+  .start-strip input { width: 100%; }
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  .codex-card img, .deck-card img { height: 160px; }
+  .deck-page, .codex-page { padding: 20px 14px 60px; }
+  .page-head h2 { font-size: 22px; letter-spacing: 3px; }
+  .codex-tabs { flex-wrap: wrap; }
+
+  /* 对局：纵向排列，信息面板占满宽度 */
+  #gameMain { flex-direction: column; height: auto; }
+  #gameMain #board { order: 0; height: auto; min-height: 50vh; padding: 8px; }
+  .info-panel { width: 100%; flex: 0 0 auto; order: 1; max-height: 56vh; }
+  .info-panel.left { order: 1; }
+  .info-panel.right { order: 2; }
+  #middle { flex-direction: column; height: auto; }
+  #banner { flex: 0 0 auto; max-width: none; min-height: 44px; }
+  #log { max-height: 120px; }
+  #oppZone { max-height: 40%; }
+  .char-card { width: 74px; }
+  .char-card .art { height: 92px; }
+  .hand-card { width: 58px; height: 84px; }
+  .panel-avatar { width: 120px; }
 }
